@@ -244,8 +244,8 @@ func TestCountEventsSql(t *testing.T) {
 			name:    "empty filter",
 			backend: defaultBackend,
 			filter:  &nostr.Filter{},
-			query:   "SELECT COUNT(*) FROM event WHERE true ORDER BY created_at DESC LIMIT $1",
-			params:  []any{100},
+			query:   "SELECT COUNT(*) FROM event WHERE true",
+			params:  nil,
 			err:     nil,
 		},
 		{
@@ -256,9 +256,8 @@ func TestCountEventsSql(t *testing.T) {
 			},
 			query: `SELECT COUNT(*)
 			FROM event 
-			WHERE (id LIKE '083ec57f36a7b39ab98a57bedab4f85355b2ee89e4b205bed58d7c3ef9edd294%') 
-			ORDER BY created_at DESC LIMIT $1`,
-			params: []any{100},
+			WHERE (id LIKE '083ec57f36a7b39ab98a57bedab4f85355b2ee89e4b205bed58d7c3ef9edd294%')`,
+			params: nil,
 			err:    nil,
 		},
 		{
@@ -269,9 +268,8 @@ func TestCountEventsSql(t *testing.T) {
 			},
 			query: `SELECT COUNT(*)
 			FROM event 
-			WHERE kind IN(1,2,3) 
-			ORDER BY created_at DESC LIMIT $1`,
-			params: []any{100},
+			WHERE kind IN(1,2,3)`,
+			params: nil,
 			err:    nil,
 		},
 		{
@@ -282,9 +280,8 @@ func TestCountEventsSql(t *testing.T) {
 			},
 			query: `SELECT COUNT(*)
 			FROM event 
-			WHERE (pubkey LIKE '7bdef7bdebb8721f77927d0e77c66059360fa62371fdf15f3add93923a613229%') 
-			ORDER BY created_at DESC LIMIT $1`,
-			params: []any{100},
+			WHERE (pubkey LIKE '7bdef7bdebb8721f77927d0e77c66059360fa62371fdf15f3add93923a613229%')`,
+			params: nil,
 			err:    nil,
 		},
 		// errors
