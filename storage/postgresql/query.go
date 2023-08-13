@@ -174,10 +174,12 @@ func (b PostgresBackend) queryEventsSql(filter *nostr.Filter, doCount bool) (str
 		conditions = append(conditions, "true")
 	}
 
-	if filter.Limit < 1 || filter.Limit > b.QueryLimit {
-		params = append(params, b.QueryLimit)
-	} else {
-		params = append(params, filter.Limit)
+	if !doCount {
+		if filter.Limit < 1 || filter.Limit > b.QueryLimit {
+			params = append(params, b.QueryLimit)
+		} else {
+			params = append(params, filter.Limit)
+		}
 	}
 
 	var query string
@@ -185,8 +187,8 @@ func (b PostgresBackend) queryEventsSql(filter *nostr.Filter, doCount bool) (str
 		query = sqlx.Rebind(sqlx.BindType("postgres"), `SELECT
           COUNT(*)
         FROM event WHERE `+
-			strings.Join(conditions, " AND ")+
-			" ORDER BY created_at DESC LIMIT ?")
+			strings.Join(conditions, " AND "),
+		)
 	} else {
 		query = sqlx.Rebind(sqlx.BindType("postgres"), `SELECT
           id, pubkey, created_at, kind, tags, content, sig
